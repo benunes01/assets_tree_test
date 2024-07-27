@@ -8,6 +8,7 @@ class Location {
   final String? parentId;
   List<Location> subLocations = [];
   List<Asset> assets = [];
+  bool isExpanded = false;
 
   Location({
     required this.name,

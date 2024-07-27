@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:tractian_test/features/assets/infra/models/asset_model.dart';
 import 'package:tractian_test/features/assets/infra/models/location_model.dart';
 import 'package:tractian_test/features/assets/presenter/components/asset_tile.dart';
+import 'package:tractian_test/features/assets/presenter/components/custom_input.dart';
 import 'package:tractian_test/features/assets/presenter/components/location_tile.dart';
 import 'package:tractian_test/features/assets/presenter/controllers/asset_controller.dart';
 
@@ -23,6 +24,11 @@ class AssetsPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                CustomInput(
+                  onChanged: controller.setTextSearch,
+                  hintText: 'Buscar Ativo ou Local',
+                  prefixIcon: const Icon(Icons.search),
+                ),
                 Expanded(
                   child: ListView.builder(
                     shrinkWrap: true,

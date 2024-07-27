@@ -8,6 +8,7 @@ class Asset {
   final String? sensorType;
   final String? status;
   List<Asset> children = [];
+  bool isExpanded = false;
 
   Asset({
     required this.name,

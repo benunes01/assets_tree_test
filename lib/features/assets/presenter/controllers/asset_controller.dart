@@ -17,6 +17,14 @@ abstract class AssetControllerBase with Store {
   ObservableList<Asset> rootAssets = ObservableList<Asset>();
   ObservableList<Location> rootLocations = ObservableList<Location>();
 
+  @observable
+  String textSearch = '';
+
+  @action
+  setTextSearch(String text) {
+    textSearch = text;
+  }
+
   @action
   Future<void> get({required String id}) async {
     final res = await useCase.call(id);

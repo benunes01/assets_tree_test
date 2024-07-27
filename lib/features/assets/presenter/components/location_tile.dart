@@ -30,6 +30,7 @@ class _LocationTileState extends State<LocationTile> {
           ],
         ),
       ),
+      initiallyExpanded: widget.location.isExpanded,
       trailing: const SizedBox.shrink(),
       leading: widget.location.assets.isNotEmpty || widget.location.subLocations.isNotEmpty ? Icon(isExpanded ? Icons.keyboard_arrow_down_outlined : Icons.keyboard_arrow_right_outlined, size: 15,) : null,
       onExpansionChanged: (value) {
