@@ -37,7 +37,7 @@ class _AssetTileState extends State<AssetTile> {
         ),
       ),
       trailing: const SizedBox.shrink(),
-      leading: widget.asset.children.isNotEmpty ? Icon(isExpanded ? Icons.keyboard_arrow_down_outlined : Icons.keyboard_arrow_right_outlined, size: 15,) : const SizedBox(),
+      leading: widget.asset.children.isNotEmpty ? Icon(isExpanded ? Icons.keyboard_arrow_down_outlined : Icons.keyboard_arrow_right_outlined, size: 15,) : null,
       onExpansionChanged: (value) {
         setState(() {
           isExpanded = value;

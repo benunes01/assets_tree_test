@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:mobx/mobx.dart';
@@ -17,43 +18,71 @@ abstract class AssetControllerBase with Store {
   ObservableList<Asset> rootAssets = ObservableList<Asset>();
   ObservableList<Location> rootLocations = ObservableList<Location>();
 
+  late final List<Asset> assetListSaved;
+  late final List<Location> locationListSaved;
+
   @observable
   String textSearch = '';
 
   @action
-  setTextSearch(String text) {
+  setTextSearch(String text) async {
     textSearch = text;
+    await _buildTree(List<Location>.from(locationListSaved), List<Asset>.from(assetListSaved));
   }
 
   @action
   Future<void> get({required String id}) async {
     final res = await useCase.call(id);
-    res.fold((success) {
-      _buildTree(success.locations, success.assets);
+    res.fold((success) async {
+      assetListSaved = List<Asset>.from(success.assets);
+      locationListSaved = List<Location>.from(success.locations);
+      await _buildTree(List<Location>.from(locationListSaved), List<Asset>.from(assetListSaved));
     }, (failure) {
       log(failure.message ?? '');
     });
   }
 
-  void _buildTree(List<Location> locations, List<Asset> assets) {
+  @action
+  Future<void> _buildTree(List<Location> locations, List<Asset> assets) async {
     rootAssets.clear();
     rootLocations.clear();
 
-    final locationMap = _buildLocationMap(locations);
-    final assetMap = _buildAssetMap(assets);
+    Map<String, Asset> assetMap = await _buildAssetMap(List<Asset>.from(assets));
+    Map<String, Location> locationMap = await _buildLocationMap(List<Location>.from(locations), assetMap);
 
-    _associateAssetsToLocations(assetMap, locationMap);
+    await _associateAssetsToLocations(assetMap, locationMap);
 
     rootLocations.addAll(locationMap.values.where((location) => location.parentId == null));
     rootAssets.addAll(assetMap.values.where((asset) => asset.parentId == null && asset.locationId == null));
+
+    rootAssets.sort((a, b) => b.children.length.compareTo(a.children.length));
+    rootLocations.sort((a, b) {
+      int aCount = a.subLocations.length + a.assets.length;
+      int bCount = b.subLocations.length + b.assets.length;
+      return bCount.compareTo(aCount);
+    });
+
   }
 
-  Map<String, Location> _buildLocationMap(List<Location> locations) {
+  Future<Map<String, Location>> _buildLocationMap(List<Location> locations, Map<String, Asset> assetMap) async {
     final Map<String, Location> locationMap = {};
     for (var location in locations) {
+      location.subLocations.clear();
+      location.assets.clear();
       locationMap[location.id] = location;
     }
-    for (var location in locations) {
+
+    bool removed;
+    do {
+      int initialSize = locationMap.values.length;
+      locationMap.removeWhere((id, location) {
+        return !location.name.toLowerCase().contains(textSearch.toLowerCase()) &&
+            !locationMap.values.any((item) => item.parentId == id) && !assetMap.values.any((item) => item.locationId == id);
+      });
+      removed = initialSize != locationMap.values.length;
+    } while (removed);
+
+    for (var location in locationMap.values) {
       if (location.parentId != null) {
         locationMap[location.parentId]?.subLocations.add(location);
       }
@@ -61,12 +90,24 @@ abstract class AssetControllerBase with Store {
     return locationMap;
   }
 
-  Map<String, Asset> _buildAssetMap(List<Asset> assets) {
+  Future<Map<String, Asset>> _buildAssetMap(List<Asset> assets) async {
     final Map<String, Asset> assetMap = {};
     for (var asset in assets) {
+      asset.children.clear();
       assetMap[asset.id] = asset;
     }
-    for (var asset in assets) {
+
+    bool removed;
+    do {
+      int initialSize = assetMap.values.length;
+      assetMap.removeWhere((id, asset) {
+        return !asset.name.toLowerCase().contains(textSearch.toLowerCase()) &&
+            !assetMap.values.any((item) => item.parentId == id);
+      });
+      removed = initialSize != assetMap.values.length;
+    } while (removed);
+
+    for (var asset in assetMap.values) {
       if (asset.parentId != null) {
         assetMap[asset.parentId]?.children.add(asset);
       }
@@ -74,7 +115,7 @@ abstract class AssetControllerBase with Store {
     return assetMap;
   }
 
-  void _associateAssetsToLocations(Map<String, Asset> assetMap, Map<String, Location> locationMap) {
+  Future<void> _associateAssetsToLocations(Map<String, Asset> assetMap, Map<String, Location> locationMap) async {
     for (var asset in assetMap.values) {
       if (asset.locationId != null) {
         locationMap[asset.locationId]?.assets.add(asset);

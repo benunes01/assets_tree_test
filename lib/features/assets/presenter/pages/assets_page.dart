@@ -25,7 +25,9 @@ class AssetsPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 CustomInput(
-                  onChanged: controller.setTextSearch,
+                  onChanged: (value) async {
+                    await controller.setTextSearch(value);
+                  },
                   hintText: 'Buscar Ativo ou Local',
                   prefixIcon: const Icon(Icons.search),
                 ),
