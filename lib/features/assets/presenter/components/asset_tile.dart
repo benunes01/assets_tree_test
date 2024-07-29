@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tractian_test/features/assets/infra/models/asset_model.dart';
+import 'package:tractian_test/ui/text_styles.dart';
 
 class AssetTile extends StatefulWidget {
   final Asset asset;
@@ -28,7 +29,11 @@ class _AssetTileState extends State<AssetTile> {
           children: [
             const Icon(Icons.settings_input_component, color: Colors.blue, size: 18,),
             const SizedBox(width: 6,),
-            Text(widget.asset.name),
+            Flexible(
+                child: Text(widget.asset.name,
+                  style: bodyMedium,
+                  overflow: TextOverflow.ellipsis,
+                )),
             if(widget.asset.sensorType != null) const Row(
               children: [
                 SizedBox(width: 6,),

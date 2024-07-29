@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tractian_test/ui/text_styles.dart';
 
 class CardSelectAsset extends StatelessWidget {
   String title;
@@ -24,7 +25,7 @@ class CardSelectAsset extends StatelessWidget {
           children: [
             const Icon(Icons.settings_system_daydream_outlined, color: Colors.white),
             const SizedBox(width: 6,),
-            Text(title, style: const TextStyle(color: Colors.white),)
+            Text(title, style: bodyLarge.copyWith(color: Colors.white),)
           ],
         ),
       ),

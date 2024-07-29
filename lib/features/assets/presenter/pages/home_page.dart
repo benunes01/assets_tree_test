@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:tractian_test/features/assets/presenter/components/card_select_asset.dart';
 import 'package:tractian_test/features/assets/presenter/controllers/asset_controller.dart';
+import 'package:tractian_test/ui/text_styles.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -13,7 +14,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: const Text('TRACTIAN', style: TextStyle(color: Colors.white),),
+        title: Text('TRACTIAN', style: headlineLarge.copyWith(color: Colors.white),),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 22.0),
