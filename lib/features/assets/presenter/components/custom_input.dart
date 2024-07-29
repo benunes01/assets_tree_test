@@ -1,16 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CustomInput extends StatelessWidget {
   Widget? prefixIcon;
   String? hintText;
-  void Function(String)? onChanged;
-  CustomInput({super.key, this.prefixIcon, this.hintText, this.onChanged});
+  void Function(String)? onSubmitted;
+  CustomInput({super.key, this.prefixIcon, this.hintText, this.onSubmitted});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      onChanged: onChanged,
+      onSubmitted: onSubmitted,
       decoration: InputDecoration(
         hintText: hintText,
         prefixIcon: prefixIcon,

@@ -3,10 +3,12 @@ import 'package:tractian_test/features/assets/infra/models/asset_model.dart';
 
 class AssetTile extends StatefulWidget {
   final Asset asset;
+  bool isInitialExpanded;
 
-  const AssetTile({
+  AssetTile({
     super.key,
     required this.asset,
+    this.isInitialExpanded = false,
   });
 
   @override
@@ -14,12 +16,12 @@ class AssetTile extends StatefulWidget {
 }
 
 class _AssetTileState extends State<AssetTile> {
-  bool isExpanded = false;
 
 
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
+      initiallyExpanded: widget.isInitialExpanded,
       title: Transform.translate(
         offset: const Offset(-18, 0),
         child: Row(
@@ -37,10 +39,10 @@ class _AssetTileState extends State<AssetTile> {
         ),
       ),
       trailing: const SizedBox.shrink(),
-      leading: widget.asset.children.isNotEmpty ? Icon(isExpanded ? Icons.keyboard_arrow_down_outlined : Icons.keyboard_arrow_right_outlined, size: 15,) : null,
+      leading: widget.asset.children.isNotEmpty ? Icon(widget.isInitialExpanded ? Icons.keyboard_arrow_down_outlined : Icons.keyboard_arrow_right_outlined, size: 15,) : null,
       onExpansionChanged: (value) {
         setState(() {
-          isExpanded = value;
+          widget.isInitialExpanded = value;
         });
       },
       childrenPadding: const EdgeInsets.only(left: 16),

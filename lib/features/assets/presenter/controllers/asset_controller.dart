@@ -15,11 +15,16 @@ abstract class AssetControllerBase with Store {
 
   AssetControllerBase({required this.useCase});
 
+  @observable
+  bool isLoading = false;
+
+  @observable
   ObservableList<Asset> rootAssets = ObservableList<Asset>();
+  @observable
   ObservableList<Location> rootLocations = ObservableList<Location>();
 
-  late final List<Asset> assetListSaved;
-  late final List<Location> locationListSaved;
+  List<Asset> assetListSaved = [];
+  List<Location> locationListSaved = [];
 
   @observable
   String textSearch = '';
@@ -44,6 +49,7 @@ abstract class AssetControllerBase with Store {
 
   @action
   Future<void> _buildTree(List<Location> locations, List<Asset> assets) async {
+    isLoading = true;
     rootAssets.clear();
     rootLocations.clear();
 
@@ -61,6 +67,8 @@ abstract class AssetControllerBase with Store {
       int bCount = b.subLocations.length + b.assets.length;
       return bCount.compareTo(aCount);
     });
+
+    isLoading = false;
 
   }
 

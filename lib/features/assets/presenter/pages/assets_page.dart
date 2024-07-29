@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:tractian_test/features/assets/infra/models/asset_model.dart';
-import 'package:tractian_test/features/assets/infra/models/location_model.dart';
 import 'package:tractian_test/features/assets/presenter/components/asset_tile.dart';
 import 'package:tractian_test/features/assets/presenter/components/custom_input.dart';
 import 'package:tractian_test/features/assets/presenter/components/location_tile.dart';
@@ -15,8 +13,16 @@ class AssetsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    controller.get(id: '1');
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white,),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: Observer(
         builder: (context) {
           return Padding(
@@ -25,13 +31,13 @@ class AssetsPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 CustomInput(
-                  onChanged: (value) async {
+                  onSubmitted: (value) async {
                     await controller.setTextSearch(value);
                   },
                   hintText: 'Buscar Ativo ou Local',
                   prefixIcon: const Icon(Icons.search),
                 ),
-                Expanded(
+                controller.isLoading ? const Center(child: CircularProgressIndicator()) : Expanded(
                   child: ListView.builder(
                     shrinkWrap: true,
                     itemCount: controller.rootLocations.length + controller.rootAssets.length,
@@ -39,7 +45,7 @@ class AssetsPage extends StatelessWidget {
                       if (index < controller.rootLocations.length) {
                         return LocationTile(location: controller.rootLocations.elementAt(index),);
                       } else {
-                        return AssetTile(asset: controller.rootAssets.elementAt(index - controller.rootLocations.length),);
+                        return AssetTile(asset: controller.rootAssets.elementAt(index - controller.rootLocations.length), isInitialExpanded: controller.textSearch.isNotEmpty,);
                       }
                     },
                   ),

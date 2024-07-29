@@ -1,4 +1,4 @@
-Map<String, dynamic> apiResponse = {
+Map<String, dynamic> apiResponse01 = {
   "assets": [
     {
       "name": "CONVEYOR BELT ASSEMBLY",

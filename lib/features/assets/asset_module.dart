@@ -7,6 +7,7 @@ import 'package:tractian_test/features/assets/domain/usecases/get_asset_usecase.
 import 'package:tractian_test/features/assets/infra/repository/asset_repository_imp.dart';
 import 'package:tractian_test/features/assets/presenter/controllers/asset_controller.dart';
 import 'package:tractian_test/features/assets/presenter/pages/assets_page.dart';
+import 'package:tractian_test/features/assets/presenter/pages/home_page.dart';
 
 class AssetModule extends Module {
   @override
@@ -20,6 +21,7 @@ class AssetModule extends Module {
 
   @override
   void routes(RouteManager r) {
-    r.child('/', child: (BuildContext context) => AssetsPage());
+    r.child('/', child: (BuildContext context) => HomePage());
+    r.child('/asset', child: (BuildContext context) => AssetsPage());
   }
 }
