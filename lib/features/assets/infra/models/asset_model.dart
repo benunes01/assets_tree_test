@@ -17,6 +17,7 @@ class Asset {
     this.parentId,
     this.sensorType,
     this.status,
+    this.children = const []
   });
 
   Map<String, dynamic> toMap() {
@@ -38,7 +39,12 @@ class Asset {
       locationId: map['locationId'],
       parentId: map['parentId'],
       sensorType: map['sensorType'],
-      status: map['status']
+      status: map['status'],
+      children: map['children'] == null
+          ? []
+          : (map['children'] as List<dynamic>)
+          .map((childMap) => Asset.fromMap(childMap as Map<String, dynamic>))
+          .toList(),
     );
   }
 

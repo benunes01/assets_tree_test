@@ -14,6 +14,8 @@ class Location {
     required this.name,
     required this.id,
     this.parentId,
+    this.subLocations = const [],
+    this.assets = const []
   });
 
   Map<String, dynamic> toMap() {
@@ -30,7 +32,17 @@ class Location {
     return Location(
       name: map['name'],
       id: map['id'],
-      parentId: map['parentId']
+      parentId: map['parentId'],
+      subLocations: map['subLocations'] == null
+          ? []
+          : (map['subLocations'] as List<dynamic>)
+          .map((childMap) => Location.fromMap(childMap as Map<String, dynamic>))
+          .toList(),
+      assets: map['assets'] == null
+          ? []
+          : (map['assets'] as List<dynamic>)
+          .map((childMap) => Asset.fromMap(childMap as Map<String, dynamic>))
+          .toList(),
     );
   }
 
