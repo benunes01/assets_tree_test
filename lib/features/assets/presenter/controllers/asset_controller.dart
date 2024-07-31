@@ -37,6 +37,9 @@ abstract class AssetControllerBase with Store {
   @observable
   ObservableList<String> sensorTypeSelectedList = ObservableList<String>();
 
+  @computed
+  bool get isFilter => sensorTypeSelectedList.isNotEmpty || isCritic || textSearch.isNotEmpty;
+
   @action
   Future<void> setTextSearch(String text) async {
     textSearch = text;

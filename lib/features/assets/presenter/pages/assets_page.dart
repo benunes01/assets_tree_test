@@ -65,9 +65,9 @@ class AssetsPage extends StatelessWidget {
                     itemCount: controller.rootLocations.length + controller.rootAssets.length,
                     itemBuilder: (context, index) {
                       if (index < controller.rootLocations.length) {
-                        return LocationTile(location: controller.rootLocations.elementAt(index),);
+                        return LocationTile(location: controller.rootLocations.elementAt(index), isInitialExpanded: controller.isFilter);
                       } else {
-                        return AssetTile(asset: controller.rootAssets.elementAt(index - controller.rootLocations.length), isInitialExpanded: controller.textSearch.isNotEmpty,);
+                        return AssetTile(asset: controller.rootAssets.elementAt(index - controller.rootLocations.length), isInitialExpanded: controller.isFilter,);
                       }
                     },
                   ),

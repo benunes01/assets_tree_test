@@ -5,9 +5,9 @@ import 'package:tractian_test/ui/text_styles.dart';
 
 class AssetTile extends StatefulWidget {
   final Asset asset;
-  bool isInitialExpanded;
+  final bool isInitialExpanded;
 
-  AssetTile({
+  const AssetTile({
     super.key,
     required this.asset,
     this.isInitialExpanded = false,
@@ -18,12 +18,18 @@ class AssetTile extends StatefulWidget {
 }
 
 class _AssetTileState extends State<AssetTile> {
+  late bool _isExpanded;
 
+  @override
+  void initState() {
+    super.initState();
+    _isExpanded = widget.isInitialExpanded;
+  }
 
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      initiallyExpanded: widget.isInitialExpanded,
+      initiallyExpanded: _isExpanded,
       title: Transform.translate(
         offset: const Offset(-18, 0),
         child: Row(
@@ -56,7 +62,7 @@ class _AssetTileState extends State<AssetTile> {
       leading: widget.asset.children.isNotEmpty ? Icon(widget.isInitialExpanded ? Icons.keyboard_arrow_down_outlined : Icons.keyboard_arrow_right_outlined, size: 15,) : null,
       onExpansionChanged: (value) {
         setState(() {
-          widget.isInitialExpanded = value;
+          _isExpanded = value;
         });
       },
       childrenPadding: const EdgeInsets.only(left: 16),

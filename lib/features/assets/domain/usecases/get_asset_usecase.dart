@@ -9,7 +9,6 @@ class GetAssetUseCase {
   GetAssetUseCase({required IAssetRepository repository})
       : _repository = repository;
 
-  @override
   AsyncResult<GetAssetsResponse, DioException> call(String id) async {
     try {
       return _repository.get(id);

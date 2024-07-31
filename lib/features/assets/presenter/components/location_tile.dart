@@ -5,9 +5,11 @@ import 'package:tractian_test/ui/text_styles.dart';
 
 class LocationTile extends StatefulWidget {
   final Location location;
-  const LocationTile({
+  bool isInitialExpanded;
+  LocationTile({
     super.key,
     required this.location,
+    this.isInitialExpanded = false,
   });
 
   @override
@@ -15,7 +17,13 @@ class LocationTile extends StatefulWidget {
 }
 
 class _LocationTileState extends State<LocationTile> {
-  bool isExpanded = false;
+  late bool _isExpanded;
+
+  @override
+  void initState() {
+    super.initState();
+    _isExpanded = widget.isInitialExpanded;
+  }
 
 
   @override
@@ -37,18 +45,18 @@ class _LocationTileState extends State<LocationTile> {
           ],
         ),
       ),
-      initiallyExpanded: widget.location.isExpanded,
+      initiallyExpanded: _isExpanded,
       trailing: const SizedBox.shrink(),
-      leading: widget.location.assets.isNotEmpty || widget.location.subLocations.isNotEmpty ? Icon(isExpanded ? Icons.keyboard_arrow_down_outlined : Icons.keyboard_arrow_right_outlined, size: 15,) : null,
+      leading: widget.location.assets.isNotEmpty || widget.location.subLocations.isNotEmpty ? Icon(_isExpanded ? Icons.keyboard_arrow_down_outlined : Icons.keyboard_arrow_right_outlined, size: 15,) : null,
       onExpansionChanged: (value) {
         setState(() {
-          isExpanded = value;
+          _isExpanded = value;
         });
       },
       childrenPadding: const EdgeInsets.only(left: 16),
       children: [
-        ...widget.location.subLocations.map((subLocation) => LocationTile(location: subLocation)),
-        ...widget.location.assets.map((asset) => AssetTile(asset: asset)),
+        ...widget.location.subLocations.map((subLocation) => LocationTile(location: subLocation, isInitialExpanded: widget.isInitialExpanded,)),
+        ...widget.location.assets.map((asset) => AssetTile(asset: asset, isInitialExpanded: widget.isInitialExpanded,)),
       ],
     );
   }
