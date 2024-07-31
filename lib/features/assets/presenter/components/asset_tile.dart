@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tractian_test/features/assets/infra/enum/sensor_type_enum.dart';
 import 'package:tractian_test/features/assets/infra/models/asset_model.dart';
 import 'package:tractian_test/ui/text_styles.dart';
 
@@ -27,17 +28,25 @@ class _AssetTileState extends State<AssetTile> {
         offset: const Offset(-18, 0),
         child: Row(
           children: [
-            const Icon(Icons.settings_input_component, color: Colors.blue, size: 18,),
+            Icon(widget.asset.sensorType != null ? Icons.settings_input_component : Icons.format_indent_increase_outlined, color: Colors.blue, size: 18,),
             const SizedBox(width: 6,),
             Flexible(
                 child: Text(widget.asset.name,
                   style: bodyMedium,
                   overflow: TextOverflow.ellipsis,
                 )),
-            if(widget.asset.sensorType != null) const Row(
+            _buildIconSensorType(widget.asset.sensorType),
+            if(widget.asset.status == 'alert') Row(
               children: [
-                SizedBox(width: 6,),
-                Icon(Icons.flash_on, color: Colors.green, size: 18)
+                const SizedBox(width: 6,),
+                Container(
+                  height: 8,
+                  width: 8,
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(100)
+                  ),
+                )
               ],
             )
           ],
@@ -52,9 +61,31 @@ class _AssetTileState extends State<AssetTile> {
       },
       childrenPadding: const EdgeInsets.only(left: 16),
       children: [
-        ...widget.asset.children.map((subAsset) => AssetTile(asset: subAsset)).toList(),
+        ...widget.asset.children.map((subAsset) => AssetTile(asset: subAsset)),
       ],
     );
+  }
+
+  Widget _buildIconSensorType(String? sensorType) {
+    SensorType? curSensorType = SensorTypeExtension.fromString(sensorType);
+    switch (curSensorType) {
+      case SensorType.energy:
+        return const Row(
+          children: [
+            SizedBox(width: 6,),
+            Icon(Icons.flash_on, color: Colors.green, size: 16,),
+          ],
+        );
+      case SensorType.vibration:
+        return const Row(
+          children: [
+            SizedBox(width: 6,),
+            Icon(Icons.vibration, color: Colors.orange,),
+          ],
+        );
+      default:
+        return Container();
+    }
   }
 }
 

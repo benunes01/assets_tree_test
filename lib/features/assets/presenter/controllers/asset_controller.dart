@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
-import 'dart:isolate';
 
 import 'package:flutter/foundation.dart';
 import 'package:mobx/mobx.dart';
@@ -33,10 +31,32 @@ abstract class AssetControllerBase with Store {
   @observable
   String textSearch = '';
 
+  @observable
+  bool isCritic = false;
+
+  @observable
+  ObservableList<String> sensorTypeSelectedList = ObservableList<String>();
+
   @action
-  setTextSearch(String text) async {
+  Future<void> setTextSearch(String text) async {
     textSearch = text;
-    await _runBuildTreeInIsolate(List<Location>.from(locationListSaved), List<Asset>.from(assetListSaved));
+    await _rebuildTree();
+  }
+
+  @action
+  Future<void> toggleIsCritic() async {
+    isCritic = !isCritic;
+    await _rebuildTree();
+  }
+
+  @action
+  Future<void> toggleSensorType(String sensor) async {
+    if (sensorTypeSelectedList.contains(sensor)) {
+      sensorTypeSelectedList.remove(sensor);
+    } else {
+      sensorTypeSelectedList.add(sensor);
+    }
+    await _rebuildTree();
   }
 
   @action
@@ -45,36 +65,42 @@ abstract class AssetControllerBase with Store {
     res.fold((success) async {
       assetListSaved = List<Asset>.from(success.assets);
       locationListSaved = List<Location>.from(success.locations);
-      await _runBuildTreeInIsolate(List<Location>.from(locationListSaved), List<Asset>.from(assetListSaved));
+      await _rebuildTree();
     }, (failure) {
       log(failure.message ?? '');
     });
   }
 
-  Future<void> _runBuildTreeInIsolate(List<Location> locations, List<Asset> assets) async {
+  Future<void> _rebuildTree() async {
     isLoading = true;
-
     final data = {
-      'locations': locations.map((e) => e.toJson()).toList(),
-      'assets': assets.map((e) => e.toJson()).toList(),
+      'locations': locationListSaved.map((e) => e.toJson()).toList(),
+      'assets': assetListSaved.map((e) => e.toJson()).toList(),
       'textSearch': textSearch,
+      'isCritic': isCritic,
+      'sensorsType': [...sensorTypeSelectedList]
     };
 
     final result = await compute(ProcessDataTree.buildTreeInIsolate, data);
 
-    rootAssets.clear();
-    rootLocations.clear();
-    rootLocations.addAll((result['rootLocations'] as List).map((e) => Location.fromJson(e)).toList());
-    rootAssets.addAll((result['rootAssets'] as List).map((e) => Asset.fromJson(e)).toList());
+    rootAssets = ObservableList<Asset>.of(
+        (result['rootAssets'] as List).map((e) => Asset.fromJson(e)).toList()
+    );
+    rootLocations = ObservableList<Location>.of(
+        (result['rootLocations'] as List).map((e) => Location.fromJson(e)).toList()
+    );
 
+    _sortAssetsAndLocations();
+
+    isLoading = false;
+  }
+
+  void _sortAssetsAndLocations() {
     rootAssets.sort((a, b) => b.children.length.compareTo(a.children.length));
     rootLocations.sort((a, b) {
       int aCount = a.subLocations.length + a.assets.length;
       int bCount = b.subLocations.length + b.assets.length;
       return bCount.compareTo(aCount);
     });
-
-    isLoading = false;
   }
-
 }

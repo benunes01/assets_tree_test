@@ -5,7 +5,7 @@ import 'package:tractian_test/ui/text_styles.dart';
 
 class LocationTile extends StatefulWidget {
   final Location location;
-  LocationTile({
+  const LocationTile({
     super.key,
     required this.location,
   });

@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 enum SensorType {
   energy,
   vibration,
@@ -15,14 +17,25 @@ extension SensorTypeExtension on SensorType {
     }
   }
 
-  static SensorType fromString(String sensorType) {
+  static SensorType? fromString(String? sensorType) {
     switch (sensorType) {
       case 'energy':
         return SensorType.energy;
       case 'vibration':
         return SensorType.vibration;
       default:
-        throw ArgumentError('Tipo de sensor desconhecido: $sensorType');
+        return null;
+    }
+  }
+
+  IconData getIcon() {
+    switch (this) {
+      case SensorType.energy:
+        return Icons.flash_on;
+      case SensorType.vibration:
+        return Icons.vibration;
+      default:
+        return Icons.insert_emoticon;
     }
   }
 }
