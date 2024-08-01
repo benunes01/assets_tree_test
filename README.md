@@ -1,5 +1,7 @@
 # Projeto Flutter
 
+https://github.com/user-attachments/assets/17f98a18-60d6-4b65-a751-3f22c225b2cc
+
 A arquitetura utilizada no projeto segue uma versão simplificada do Clean Architecture, incorporando princípios do SOLID e usando o Modular para injeção de dependências. A intenção é demonstrar boas práticas e organização de código, mantendo a simplicidade.
 
 Para simular as camadas da arquitetura, foram deixados alguns rethrow no código. Em um caso real, poderiam ser criadas exceções específicas e classes de falhas (failures) para um tratamento adequado.
