@@ -14,6 +14,9 @@ Para simular as camadas da arquitetura, foram deixados alguns rethrow no código
 
 Para simular as chamadas de serviço e obter os dados, foi criado um mock.
 
+### Testes unitarios
+Testes unitários apenas nos models para representar o uso.
+
 ### Isolate
 Foi utilizado Isolate para construir a árvore de dados, garantindo que a animação de carregamento não seja travada e proporcionando uma experiência de usuário mais fluida.
 
