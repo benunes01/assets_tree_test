@@ -1,5 +1,11 @@
 # Projeto Flutter
 
+Listagem de base de dados (empresas)
+
+Visualização dos Assets em Árvore
+
+Filtro por nome, status e sensor
+
 https://github.com/user-attachments/assets/17f98a18-60d6-4b65-a751-3f22c225b2cc
 
 A arquitetura utilizada no projeto segue uma versão simplificada do Clean Architecture, incorporando princípios do SOLID e usando o Modular para injeção de dependências. A intenção é demonstrar boas práticas e organização de código, mantendo a simplicidade.
@@ -16,9 +22,24 @@ Foi utilizado Isolate para construir a árvore de dados, garantindo que a anima�
 - **Flutter:** 3.22.3 (channel stable)
 - **Dart:** 3.4.4
 
+## Packages
+flutter_modular
+
+result_dart
+
+mobx
+
+dio
+
 ## Gerenciamento de Estado
 
-Para o gerenciamento de estado, foi utilizado o **MobX**. Para gerar o código necessário, use o seguinte comando:
+Para o gerenciamento de estado, foi utilizado o **MobX** (Necessita de build runner).
+
+## Rodar o projeto
 
 ```sh
+flutter pub get
+
 fvm flutter packages pub run build_runner build --delete-conflicting-outputs
+
+$ flutter run
