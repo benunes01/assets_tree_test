@@ -65,7 +65,15 @@ abstract class AssetControllerBase with Store {
   }
 
   @action
+  _resetFilters() {
+    isCritic = false;
+    sensorTypeSelectedList.clear();
+    textSearch = '';
+  }
+
+  @action
   Future<void> get({required String id}) async {
+    _resetFilters();
     final res = await useCase.call(id);
     res.fold((success) async {
       assetListSaved = List<Asset>.from(success.assets);
