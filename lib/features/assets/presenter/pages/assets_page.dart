@@ -19,7 +19,7 @@ class AssetsPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.black,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white,),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -39,7 +39,7 @@ class AssetsPage extends StatelessWidget {
                   hintText: 'Buscar Ativo ou Local',
                   prefixIcon: const Icon(Icons.search),
                 ),
-                const SizedBox(height: 4,),
+                const SizedBox(height: 4),
                 SizedBox(
                   height: 32,
                   child: ListView(
@@ -47,34 +47,42 @@ class AssetsPage extends StatelessWidget {
                     children: [
                       ..._buildSensorTypes(),
                       OptionFilter(
-                          title: 'crítico',
-                          icon: Icons.warning_amber_rounded,
-                          onTap: () {
-                            controller.toggleIsCritic();
-                          },
-                          isActive: controller.isCritic,
+                        title: 'crítico',
+                        icon: Icons.warning_amber_rounded,
+                        onTap: () {
+                          controller.toggleIsCritic();
+                        },
+                        isActive: controller.isCritic,
                       ),
-
                     ],
                   ),
                 ),
-                const SizedBox(height: 4,),
-                controller.isLoading ? const Center(child: CircularProgressIndicator()) : Expanded(
+                const SizedBox(height: 4),
+                controller.isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : Expanded(
                   child: ListView.builder(
                     shrinkWrap: true,
                     itemCount: controller.rootLocations.length + controller.rootAssets.length,
                     itemBuilder: (context, index) {
                       if (index < controller.rootLocations.length) {
-                        return LocationTile(location: controller.rootLocations.elementAt(index), isInitialExpanded: controller.isFilter);
+                        return LocationTile(
+                          location: controller.rootLocations.elementAt(index),
+                          isInitialExpanded: controller.isFilter,
+                        );
                       } else {
-                        return AssetTile(asset: controller.rootAssets.elementAt(index - controller.rootLocations.length), isInitialExpanded: controller.isFilter,);
+                        return AssetTile(
+                          asset: controller.rootAssets.elementAt(index - controller.rootLocations.length),
+                          isInitialExpanded: controller.isFilter,
+                        );
                       }
                     },
                   ),
                 ),
-              ],),
+              ],
+            ),
           );
-        }
+        },
       ),
     );
   }

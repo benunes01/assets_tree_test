@@ -16,7 +16,7 @@ class AssetsRepository extends IAssetRepository {
       final result = await _service.get(id);
       return Success(result);
     } catch (e) {
-      return Failure(DioException as DioException);
+      return Failure(e as DioException);
     }
   }
 }

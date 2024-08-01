@@ -6,15 +6,19 @@ import 'package:tractian_test/features/assets/infra/models/response/get_assets_r
 
 class AssetsService implements IAssetService {
 
+  Map<String, Map<String, dynamic>> mockApiResponses = {
+    '01': apiResponse01,
+    '02': apiResponse02,
+    '03': apiResponse03,
+  };
+
   @override
   Future<GetAssetsResponse> get(id) async {
+    final response = mockApiResponses[id];
+    if (response == null) {
+      throw Exception('Asset ID não encontrado: $id');
+    }
 
-    var apiResponse = {
-      '01': apiResponse01,
-      '02': apiResponse02,
-      '03': apiResponse03,
-    };
-
-    return GetAssetsResponse.fromMap(apiResponse[id]!);
+    return GetAssetsResponse.fromMap(response);
   }
 }
