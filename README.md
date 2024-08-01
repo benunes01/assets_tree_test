@@ -4,7 +4,7 @@ A arquitetura utilizada no projeto segue uma versão simplificada do Clean Archi
 
 Para simular as camadas da arquitetura, foram deixados alguns rethrow no código. Em um caso real, poderiam ser criadas exceções específicas e classes de falhas (failures) para um tratamento adequado.
 
-Para simular as chamadas de serviço e obter os dados, foi criado um mock. Isso permite o desenvolvimento e testes sem a necessidade de um backend real.
+Para simular as chamadas de serviço e obter os dados, foi criado um mock.
 
 ### Isolate
 Foi utilizado Isolate para construir a árvore de dados, garantindo que a animação de carregamento não seja travada e proporcionando uma experiência de usuário mais fluida.
