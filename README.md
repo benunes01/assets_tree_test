@@ -16,6 +16,9 @@ Para simular as chamadas de serviço e obter os dados, foi criado um mock.
 
 ### Testes unitarios
 Testes unitários apenas nos models para representar o uso.
+```sh
+flutter test
+```
 
 ### Isolate
 Foi utilizado Isolate para construir a árvore de dados, garantindo que a animação de carregamento não seja travada e proporcionando uma experiência de usuário mais fluida.
@@ -43,6 +46,6 @@ Para o gerenciamento de estado, foi utilizado o **MobX** (Necessita de build run
 ```sh
 flutter pub get
 
-fvm flutter packages pub run build_runner build --delete-conflicting-outputs
+flutter packages pub run build_runner build --delete-conflicting-outputs
 
-$ flutter run
+flutter run
